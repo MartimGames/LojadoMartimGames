@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Martim Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            flex: 1;
+            padding: 1em;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+            position: static;
+            width: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Loja Martim Games</h1>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('home')">Home</a></li>
+                <li><a href="#" onclick="showSection('login')">Login</a></li>
+                <li><a href="#" class="customize-link hidden" onclick="showSection('customize')">Customizar</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="home">
+            <h2>Bem-vindo à Loja Martim Games!</h2>
+            <div id="products"></div>
+        </section>
+        <section id="login" class="hidden">
+            <h2>Login</h2>
+            <form id="login-form">
+                <label for="username">Usuário:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Entrar</button>
+            </form>
+            <div id="login-message"></div>
+        </section>
+        <section id="customize" class="hidden">
+            <h2>Customização do Site</h2>
+            <form id="add-product-form">
+                <h3>Adicionar Produto</h3>
+                <label for="product-name">Nome do Produto:</label>
+                <input type="text" id="product-name" name="product-name" required>
+                <label for="product-description">Descrição do Produto:</label>
+                <input type="text" id="product-description" name="product-description" required>
+                <button type="submit">Adicionar Produto</button>
+            </form>
+            <div id="customize-message"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Martim Games</p>
+    </footer>
+    <script>
+        let currentUsername = 'M@rtimGamesStore';
+        let currentPassword = 'M@rtimGamesStoree13chatgpt';
+        const products = [];
+
+        function showSection(sectionId) {
+            document.querySelectorAll('main section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        function displayProducts() {
+            const productsDiv = document.getElementById('products');
+            productsDiv.innerHTML = '';
+            products.forEach((product, index) => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+                productDiv.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <button onclick="deleteProduct(${index})">Excluir</button>
+                `;
+                productsDiv.appendChild(productDiv);
+            });
+        }
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            displayProducts();
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === currentUsername && password === currentPassword) {
+                document.querySelector('.customize-link').classList.remove('hidden');
+                showSection('customize');
+            } else {
+                document.getElementById('login-message').innerText = 'Usuário ou senha inválidos';
+            }
+        });
+
+        document.getElementById('add-product-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const productName = document.getElementById('product-name').value;
+            const productDescription = document.getElementById('product-description').value;
+
+            products.push({
+                name: productName,
+                description: productDescription
+            });
+
+            displayProducts();
+            document.getElementById('add-product-form').reset();
+            document.getElementById('customize-message').innerText = 'Produto adicionado com sucesso';
+        });
+
+        // Inicializa a exibição de produtos
+        displayProducts();
+    </script>
+</body>
+</html>
